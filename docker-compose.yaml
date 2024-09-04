@@ -1,0 +1,44 @@
+version: "3.8"
+
+services:
+  wireguard:
+    image: lscr.io/linuxserver/wireguard:latest
+    container_name: wireguard
+    cap_add:
+      - NET_ADMIN
+      - SYS_MODULE #optional
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+      - SERVERURL=93.183.88.70
+      - SERVERPORT=51820 #optional
+      - PEERS=100 #optional
+      - PEERDNS=auto #optional
+      - INTERNAL_SUBNET=10.13.13.0 #optional
+      - ALLOWEDIPS=0.0.0.0/0 #optional
+      - PERSISTENTKEEPALIVE_PEERS= #optional
+      - LOG_CONFS=true #optional
+    volumes:
+      - root/wireguard/config:/config  #host:container
+      - /lib/modules:/lib/modules #optional
+    ports:
+      - 51820:51820/udp
+    sysctls:
+      - net.ipv4.conf.all.src_valid_mark=1
+    restart: unless-stopped
+  app:
+    depends_on:
+      - wireguard
+    image: crow62dy/vpn-node:v1
+    restart: on-failure
+    env_file: ./.env
+    ports:
+      - $SPRING_LOCAL_PORT:$SPRING_DOCKER_PORT
+      - $DEBUG_LOCAL_PORT:$DEBUG_DOCKER_PORT
+    volumes:
+      - .m2:/root/.m2
+      - /root/wireguard/config/:/app/data
+      - /var/run/docker.sock:/var/run/docker.sock
+    stdin_open: true
+    tty: true
