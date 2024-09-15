@@ -13,7 +13,7 @@ services:
       - TZ=Etc/UTC
       - SERVERURL=212.34.145.83
       - SERVERPORT=51820 #optional
-      - PEERS=200 #optional
+      - PEERS=50 #optional
       - PEERDNS=auto #optional
       - INTERNAL_SUBNET=10.13.13.0 #optional
       - ALLOWEDIPS=0.0.0.0/0 #optional
