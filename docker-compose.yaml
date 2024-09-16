@@ -11,7 +11,7 @@ services:
       - PUID=1000
       - PGID=1000
       - TZ=Etc/UTC
-      - SERVERURL=212.34.145.83
+      - SERVERURL=$SLAVE_URL
       - SERVERPORT=51820 #optional
       - PEERS=200 #optional
       - PEERDNS=auto #optional
